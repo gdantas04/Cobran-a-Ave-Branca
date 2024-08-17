@@ -13,8 +13,6 @@ telebotToken = os.getenv("telebotToken")
 tesAccount = int(os.getenv("tesId"))
 
 
-
-
 # Implementação do pagamento (gera pix e verifica se houve pagamento)
 class Payment():
     def __init__(self):
@@ -139,6 +137,7 @@ class sent_flag():
         with open(self.file, 'w') as f:
             json.dump(self.flags, f)
 
+
 # Carregar banco de dados como usersData
 usersData = Database('AveBranca.json') 
 
@@ -172,7 +171,7 @@ def scheduleBackup():
         if time.strftime("%H:%M") == "18:00":
 
             tocp_file = f'{os.getcwd()}/AveBranca.json'
-            out_file = f'{os.getcwd()}/bup-{time.strftime("%D").replace('/','-')}.json'
+            out_file = f'{os.getcwd()}/bup-{time.strftime("%D").replace("/","-")}.json'
 
             os.system(f'cp  {tocp_file} {out_file}')
 
@@ -349,7 +348,7 @@ def commands():
                 payload = payment.Pay(float(to_pay), identifier)
 
 
-                bot.send_message(message.from_user.id, f'⚔️ Faça o pagamento de R${to_pay.replace('.',',')} através do código abaixo. O valor é relativo ao mês atual e às pendências, caso hajam.\n\n⚠️ NOTA: VOCÊ TEM 5 MINUTOS A PARTIR DE AGORA PARA FAZER O PAGAMENTO.', reply_markup=markup)
+                bot.send_message(message.from_user.id, f'⚔️ Faça o pagamento de R${to_pay.replace(".",",")} através do código abaixo. O valor é relativo ao mês atual e às pendências, caso hajam.\n\n⚠️ NOTA: VOCÊ TEM 5 MINUTOS A PARTIR DE AGORA PARA FAZER O PAGAMENTO.', reply_markup=markup)
                 bot.send_message(message.from_user.id, f'<code>{payload}</code>', parse_mode='HTML',reply_markup=markup)
 
                 
