@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 load_dotenv(dotenv_path= f'{os.getcwd()}/credentials.env') 
 mPagoToken = os.getenv("mPagoToken")
 telebotToken = os.getenv("telebotToken")
-tesId = os.getenv("tesId")
+tesAccount = int(os.getenv("tesId"))
 
 
 
@@ -141,9 +141,6 @@ class sent_flag():
 
 # Carregar banco de dados como usersData
 usersData = Database('AveBranca.json') 
-
-# Conta da tesouraria (Recebe backups, comprovantes, tem permissões para gerenciar membros cadastrados)
-tesAccount = tesId
 
 # Preço da mensalidade
 subscription = 15
