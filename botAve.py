@@ -241,14 +241,14 @@ def commands():
             bot.send_message(message.from_user.id, 'Oops...')
 
     def startResp(message):
-            try:
-                name = message.text
-                usersData.addUser(message.from_user.id, name)
-                bot.send_message(message.from_user.id, f'🤝 {name} foi adicionado ao banco de dados.', reply_markup=markup)
-                bot.send_message(tesAccount, f'{name} foi adicionado ao banco de dados.', reply_markup=markup_tes)
+        try:
+            name = message.text
+            usersData.addUser(message.from_user.id, name)
+            bot.send_message(message.from_user.id, f'🤝 {name} foi adicionado ao banco de dados.', reply_markup=markup)
+            bot.send_message(tesAccount, f'{name} foi adicionado ao banco de dados.', reply_markup=markup_tes)
 
-            except Exception:
-                bot.send_message(message.from_user.id, 'Oops...')
+        except Exception:
+            bot.send_message(message.from_user.id, 'Oops...')
 
             
 
@@ -380,9 +380,22 @@ def commands():
 
 
 # Threads pra fazer os comandos ficarem plenamente executaveis enquanto é feita a verificação de data
-Thread(target = commands).start()
-Thread(target = requestPayment).start()
-Thread(target = scheduleBackup).start()
+try:
+    Thread(target = commands).start()
+except Exception():
+    exit()
 
+try:
+    Thread(target = requestPayment).start()
+except Exception():
+    exit()
 
-bot.polling()
+try:   
+    Thread(target = scheduleBackup).start()
+except Exception():
+    exit()
+
+try:
+    bot.infinity_polling()
+except Exception():
+    exit()
