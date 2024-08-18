@@ -1,5 +1,5 @@
 # Importando o módulo
-import telebot, json, time, os, mercadopago
+import telebot, json, time, os, mercadopago, datetime
 from datetime import date
 from threading import Thread
 from telebot import types
@@ -17,13 +17,16 @@ tesAccount = int(os.getenv("tesId"))
 class Payment():
     def __init__(self):
         self.id = None
-        self.token = mPagoToken
-        self.sdk = mercadopago.SDK(self.token)
+        self.sdk = mercadopago.SDK(mPagoToken)
 
 
     def Pay(self, amount, description):
 
+        expire = datetime.datetime.now() + datetime.timedelta(minutes=6)
+        expire = expire.strftime("%Y-%m-%dT%H:%M:%S.000-03:00")
+
         payment_data = {
+            "date_of_expiration": f"{expire}",
             "transaction_amount": amount,
             "description": f"{description}",
             "payment_method_id": 'pix',
@@ -365,8 +368,8 @@ def commands():
                         bot.send_message(tesAccount, f'Pagamento de R$ {to_pay} enviado por {usersData.getDatabase()[str(message.from_user.id)]["name"]}.', reply_markup=markup_tes) #Envia o pagamento ao tesoureiro
                         break
 
-                    elif count > 60:
-                        bot.send_message(message.from_user.id, '❌ Seu pagamento foi expirado. Tente novamente.')
+                    elif count > 72:
+                        bot.send_message(message.from_user.id, '❌ O código PIX foi expirado.')
                         break
 
                     count += 1
