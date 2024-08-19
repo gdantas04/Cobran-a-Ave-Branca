@@ -168,6 +168,7 @@ end_date = 15
 bot = telebot.TeleBot(telebotToken)
 
 
+
 # Botões que aparecem para o membro comum
 markup = types.ReplyKeyboardMarkup(one_time_keyboard=False)
 markup.add('/pendencias', '/pagar')
@@ -175,6 +176,10 @@ markup.add('/pendencias', '/pagar')
 # Botões que aparecem para a conta da tesouraria
 markup_tes = types.ReplyKeyboardMarkup(one_time_keyboard=False)
 markup_tes.add('/gestao', '/remove')
+
+# Botão que aparecem para o usuario que inseriu um nome inválido
+markup_unregistered = types.ReplyKeyboardMarkup(one_time_keyboard=True)
+markup_unregistered.add('/start')
 
 
 
@@ -256,9 +261,12 @@ def commands():
     def startResp(message):
         try:
             name = message.text
-            usersData.addUser(message.from_user.id, name)
-            bot.send_message(message.from_user.id, f'🤝 {name} foi adicionado ao banco de dados.', reply_markup=markup)
-            bot.send_message(tesAccount, f'{name} foi adicionado ao banco de dados.', reply_markup=markup_tes)
+            if str(name).isalpha():
+                usersData.addUser(message.from_user.id, name)
+                bot.send_message(message.from_user.id, f'🤝 {name} foi adicionado ao banco de dados.', reply_markup=markup)
+                bot.send_message(tesAccount, f'{name} foi adicionado ao banco de dados.', reply_markup=markup_tes)
+            else:
+                bot.send_message(message.from_user.id, f'❌ "{name}" não é um nome válido.\n\nExecute /start para refazer seu cadastro.', reply_markup=markup_unregistered)
 
         except Exception:
             bot.send_message(message.from_user.id, 'Oops...')
