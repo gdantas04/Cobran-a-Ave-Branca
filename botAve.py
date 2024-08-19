@@ -13,38 +13,48 @@ telebotToken = os.getenv("telebotToken")
 tesAccount = int(os.getenv("tesId"))
 
 
+
 # Implementação do pagamento (gera pix e verifica se houve pagamento)
 class Payment():
     def __init__(self):
         self.id = None
         self.sdk = mercadopago.SDK(mPagoToken)
+        self.moment_of_payment = None
 
 
     def Pay(self, amount, description):
 
-        expire = datetime.datetime.now() + datetime.timedelta(minutes=6)
-        expire = expire.strftime("%Y-%m-%dT%H:%M:%S.000-03:00")
-
         payment_data = {
-            "date_of_expiration": f"{expire}",
             "transaction_amount": amount,
             "description": f"{description}",
             "payment_method_id": 'pix',
             "installments": 1,
             "payer": {
-                "email": 'gabrieldma2004@gmail.com'
+                "email": 'abc@123.com'
             }
         }
 
         self.id = self.sdk.payment().create(payment_data)["response"]["id"]
         pixCode = self.sdk.payment().get(self.id)["response"]['point_of_interaction']['transaction_data']['qr_code']
 
+        self.moment_of_payment = datetime.datetime.now()
+
         return pixCode
-    
 
     def paymentStatus(self):
         if self.id is not None:
             return self.sdk.payment().get(self.id)["response"]["status"]
+
+
+    def polling(self, minutes=10):
+        while(((datetime.datetime.now() - self.moment_of_payment).seconds)/60 < minutes):
+            if self.paymentStatus() == 'approved':
+                return self.paymentStatus()
+            else:
+                time.sleep(2)
+        else:
+            self.sdk.payment().update(self.id, {"status": "cancelled"})
+            return self.paymentStatus()
 
 # Implementação do banco de dados de usuários
 class Database():
@@ -355,25 +365,19 @@ def commands():
                 bot.send_message(message.from_user.id, f'<code>{payload}</code>', parse_mode='HTML',reply_markup=markup)
 
                 
-                count = 0
-                while True:
-                    status = payment.paymentStatus()
+                status = payment.polling()
 
-                    if status == 'approved':
-                        bot.send_message(message.from_user.id, '✅ Seu pagamento foi aprovado!')
+                if status == 'approved':
+                    bot.send_message(message.from_user.id, '✅ Seu pagamento foi aprovado!', reply_markup=markup)
 
-                        for pend in usersData.getPendingUsers()[message.from_user.id]:
-                            usersData.updatePaymentStatus(message.from_user.id, pend, 1)
-                        
-                        bot.send_message(tesAccount, f'Pagamento de R$ {to_pay} enviado por {usersData.getDatabase()[str(message.from_user.id)]["name"]}.', reply_markup=markup_tes) #Envia o pagamento ao tesoureiro
-                        break
+                    for pend in usersData.getPendingUsers()[message.from_user.id]:
+                        usersData.updatePaymentStatus(message.from_user.id, pend, 1)
 
-                    elif count > 72:
-                        bot.send_message(message.from_user.id, '❌ O código PIX foi expirado.')
-                        break
+                    bot.send_message(tesAccount, f'Pagamento de R$ {to_pay} enviado por {usersData.getDatabase()[str(message.from_user.id)]["name"]}.', reply_markup=markup_tes) #Envia o pagamento ao tesoureiro
 
-                    count += 1
-                    time.sleep(5)
+                else:
+                    bot.send_message(message.from_user.id, '❌ Seu pagamento não foi validado.\n\nSe você acha que isso foi um engano, contate a tesouraria.', reply_markup=markup)
+
             else:
                 bot.send_message(message.from_user.id, "❌ Solicitação inválida.", reply_markup=markup)
         
