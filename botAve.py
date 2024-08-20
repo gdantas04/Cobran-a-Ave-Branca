@@ -261,7 +261,7 @@ def commands():
     def startResp(message):
         try:
             name = message.text
-            if str(name).isalpha():
+            if str(name).replace(' ','').isalpha():
                 usersData.addUser(message.from_user.id, name)
                 bot.send_message(message.from_user.id, f'🤝 {name} foi adicionado ao banco de dados.', reply_markup=markup)
                 bot.send_message(tesAccount, f'{name} foi adicionado ao banco de dados.', reply_markup=markup_tes)
