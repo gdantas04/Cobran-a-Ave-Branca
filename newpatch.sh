@@ -10,4 +10,4 @@ rm ~/Cobranca-Ave-Branca/credentials.env
 
 mv ~/Credentials.env ~/Cobranca-Ave-Branca
 
-sh runme.sh
+echo Done!
