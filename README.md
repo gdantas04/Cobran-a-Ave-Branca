@@ -21,7 +21,7 @@ Bot de Telegram que gerencia e realiza os pagamentos da mensalidade do Capítulo
   - Detalhamento de cada mensalidade (pago ou não pago).
   
 ## Como usar? 🚀
-Acesse o bot através do [link](https://t.me/ave383_bot) ou pesquise **@ave383_bot** na barra de pesquisa do Telegram.
+Acesse o bot através do [link](https://t.me/avebrancabot) ou pesquise **@avebrancabot** na barra de pesquisa do Telegram.
 
 
 ### Comandos
