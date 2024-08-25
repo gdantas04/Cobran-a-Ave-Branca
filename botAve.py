@@ -256,7 +256,7 @@ def commands():
                 else:
                     bot.send_message(message.from_user.id, f'👋 Olá novamente!', reply_markup=markup)
         except Exception:
-            bot.send_message(message.from_user.id, 'Oops...')
+            bot.send_message(message.from_user.id, 'Um erro ocorreu... Verifique se sua conexão com a internet está estável.')
 
     def startResp(message):
         try:
@@ -269,7 +269,7 @@ def commands():
                 bot.send_message(message.from_user.id, f'❌ "{name}" não é um nome válido.\n\nExecute /start para refazer seu cadastro.', reply_markup=markup_unregistered)
 
         except Exception:
-            bot.send_message(message.from_user.id, 'Oops...')
+            bot.send_message(message.from_user.id, 'Um erro ocorreu... Verifique se sua conexão com a internet está estável.')
 
             
 
@@ -289,7 +289,7 @@ def commands():
                 bot.send_message(message.from_user.id, pendent_txt, reply_markup=markup_tes)
 
         except Exception:
-            bot.send_message(message.from_user.id, 'Oops...')
+            bot.send_message(message.from_user.id, 'Um erro ocorreu... Verifique se sua conexão com a internet está estável.')
 
 
     # Comando /remove (remove usuário pelo id)
@@ -308,7 +308,7 @@ def commands():
                 else:
                     bot.send_message(tesAccount, "Não há usuários a serem removidos.")
         except Exception:
-            bot.send_message(message.from_user.id, 'Oops...')
+            bot.send_message(message.from_user.id, 'Um erro ocorreu... Verifique se sua conexão com a internet está estável.')
 
     def removeResp(message):
         try:
@@ -319,7 +319,7 @@ def commands():
             else:
                 bot.send_message(tesAccount, 'Verifique o ID informado e tente novamente.', reply_markup=markup_tes)
         except Exception:
-            bot.send_message(message.from_user.id, 'Oops...')
+            bot.send_message(message.from_user.id, 'Um erro ocorreu... Verifique se sua conexão com a internet está estável.')
 
 
 
@@ -338,7 +338,7 @@ def commands():
                 except Exception:
                     bot.send_message(message.from_user.id, '🙏 Você não tem pendências.', reply_markup=markup)
         except Exception:
-            bot.send_message(message.from_user.id, 'Oops...')
+            bot.send_message(message.from_user.id, 'Um erro ocorreu... Verifique se sua conexão com a internet está estável.')
                     
 
     # Comando /pagar (efetua o pagamento)
@@ -353,7 +353,7 @@ def commands():
             else:
                 bot.send_message(message.from_user.id, '🙏 Você não tem pagamentos a serem feitos.', reply_markup=markup)
         except Exception:
-            bot.send_message(message.from_user.id, 'Oops...')
+            bot.send_message(message.from_user.id, 'Um erro ocorreu... Verifique se sua conexão com a internet está estável.')
 
 
     def fazerPagamento(message):
@@ -390,7 +390,7 @@ def commands():
                 bot.send_message(message.from_user.id, "❌ Solicitação inválida.", reply_markup=markup)
         
         except Exception:
-            bot.send_message(message.from_user.id, 'Oops...')
+            bot.send_message(message.from_user.id, 'Um erro ocorreu... Verifique se sua conexão com a internet está estável.')
 
 
 
