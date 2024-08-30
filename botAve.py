@@ -209,7 +209,11 @@ def requestPayment():
             if (date.today().day == start_date) and (flags.getFlag(5) == False):
                 bot.send_message(tesAccount, f'Os pagamentos abriram hoje ({start_date}) e os membros devedores estão sendo informados.', reply_markup=markup_tes)
                 for user_id in usersData.getDatabase():
-                    bot.send_message(int(user_id), f"🫵 Olá! Hoje é dia {start_date}, e você já pode pagar a sua mensalidade. Não deixe pra outra hora e emita o pix com o comando /pagar.", reply_markup=markup)
+                    try:
+                        bot.send_message(int(user_id), f"🫵 Olá! Hoje é dia {start_date}, e você já pode pagar a sua mensalidade. Não deixe pra outra hora e emita o pix com o comando /pagar.", reply_markup=markup)
+                    except Exception:
+                        pass
+                        
                     month = f'{date.today().month}/{date.today().year}'
                     usersData.updatePaymentStatus(int(user_id), month, 0)
 
@@ -227,7 +231,12 @@ def requestPayment():
                     text = ''
                     for pend in usersData.getPendingUsers()[user]:
                         text += f'{pend}\n'
-                    bot.send_message(user, f"🫵 Olá! Estou passando para lembrar da sua mensalidade. Hoje é o prazo máximo para efetuar o pagamento. Seguem as suas pendências:\n\n{text}", reply_markup=markup)
+                        
+                    try:
+                        bot.send_message(user, f"🫵 Olá! Estou passando para lembrar da sua mensalidade. Hoje é o prazo máximo para efetuar o pagamento. Seguem as suas pendências:\n\n{text}", reply_markup=markup)
+                    except Exception:
+                        pass
+                        
                 flags.writeFlag(15, True)
 
             if (date.today().day != end_date) and (flags.getFlag(15) == True):
